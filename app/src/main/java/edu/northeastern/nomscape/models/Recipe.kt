@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Results(
+data class Recipe(
     @SerializedName("thumbnail_url") var thumbnailUrl : String? = null,
     @SerializedName("name") var name: String? = null,
     @SerializedName("id") var id: String? = null,

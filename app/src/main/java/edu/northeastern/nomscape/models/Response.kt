@@ -1,5 +1,5 @@
 package edu.northeastern.nomscape.models
 
 data class Response(
-    val results: List<Results> = listOf()
+    val results: List<Recipe> = listOf()
 )
