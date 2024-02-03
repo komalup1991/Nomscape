@@ -6,8 +6,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,10 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -36,44 +37,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import edu.northeastern.nomscape.models.Recipe
-import edu.northeastern.nomscape.repository.RecipesRepository
 import edu.northeastern.nomscape.ui.theme.NomscapeTheme
+import edu.northeastern.nomscape.viewmodels.RecipeViewModel
+import edu.northeastern.nomscape.viewmodels.uistate.UiState
+
 
 class MainActivity : ComponentActivity() {
 
-    val resultList = listOf(
-        Recipe(
-            id = "4704",
-            servings = "4",
-            prepTimeMinutes = "5",
-            name = "Low-Carb Avocado Chicken",
-            thumbnailUrl = "https://img.buzzfeed.com/thumbnailer-prod-us-east-1/45b4efeb5d2c4d29970344ae165615ab/FixedFBFinal.jpg",
-            description = "This chicken salad is a lunchtime delight! Packed with creamy avocado, tender chicken, and crunchy veggies, it's a healthy and satisfying meal that won't weigh you down. Tossed in a tangy yogurt dressing with a hint of spice, it's a flavor explosion that's perfect for a light meal."
-        ),
-        Recipe(
-            id = "5466",
-            servings = "4",
-            prepTimeMinutes = "5",
-            name = "Tomato And Anchovy Pasta",
-            thumbnailUrl = "https://img.buzzfeed.com/thumbnailer-prod-us-east-1/video-api/assets/216182.jpg",
-            description = "Savor the bold flavors of this Tomato and Anchovy Pasta, a perfect weeknight meal that's both simple and satisfying. With a zesty tomato sauce and umami-packed anchovies, this dish will have your taste buds dancing in no time!"
-        ),
-        Recipe(
-            id = "5814",
-            servings = "4",
-            prepTimeMinutes = "5",
-            name = "Blueberry Cream Muffins",
-            thumbnailUrl = "https://img.buzzfeed.com/tasty-app-user-assets-prod-us-east-1/recipes/4e9524578f544c888af761e10630593b.jpeg",
-            description = "Yummy blueberry muffins."
-        )
-    )
+    private val recipeViewModel = RecipeViewModel()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
 
         setContent {
             NomscapeTheme {
@@ -83,47 +58,40 @@ class MainActivity : ComponentActivity() {
                     ), title = { Text(text = "Recipes") })
                 }, containerColor = MaterialTheme.colorScheme.outlineVariant) { paddingValues ->
                     Row(modifier = Modifier.padding(paddingValues)) {
-                        var recipeList by remember {
-                            mutableStateOf(listOf<Recipe>())
+                        val uiState =
+                            recipeViewModel.fetchRecipeList().observeAsState(UiState.Loading)
+                        when (uiState.value) {
+                            is UiState.Success ->
+                                RecipeList(
+                                    recipeList = (uiState.value as UiState.Success).recipeList,
+                                    context = LocalContext.current
+                                )
+                            is UiState.Error -> Column(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment  = Alignment.CenterHorizontally,
+                            ) { Text(text = "Unable to load data!") }
+                            is UiState.Loading -> {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment  = Alignment.CenterHorizontally,
+                                ) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.width(64.dp),
+                                        color = MaterialTheme.colorScheme.secondary,
+                                        trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                                    )
+                                }
+                            }
                         }
 
-                        RecipesRepository().fetchRecipes { resultsList ->
-                            recipeList = resultsList
-                        }
-                        RecipeList(recipeList = recipeList, context = LocalContext.current)
                     }
                 }
             }
         }
     }
 }
-
-val resultList = listOf(
-    Recipe(
-        id = "4704",
-        servings = "4",
-        prepTimeMinutes = "5",
-        name = "Low-Carb Avocado Chicken",
-        thumbnailUrl = "https://img.buzzfeed.com/thumbnailer-prod-us-east-1/45b4efeb5d2c4d29970344ae165615ab/FixedFBFinal.jpg",
-        description = "This chicken salad is a lunchtime delight! Packed with creamy avocado, tender chicken, and crunchy veggies, it's a healthy and satisfying meal that won't weigh you down. Tossed in a tangy yogurt dressing with a hint of spice, it's a flavor explosion that's perfect for a light meal."
-    ),
-    Recipe(
-        id = "5466",
-        servings = "4",
-        prepTimeMinutes = "5",
-        name = "Tomato And Anchovy Pasta",
-        thumbnailUrl = "https://img.buzzfeed.com/thumbnailer-prod-us-east-1/video-api/assets/216182.jpg",
-        description = "Savor the bold flavors of this Tomato and Anchovy Pasta, a perfect weeknight meal that's both simple and satisfying. With a zesty tomato sauce and umami-packed anchovies, this dish will have your taste buds dancing in no time!"
-    ),
-    Recipe(
-        id = "5814",
-        servings = "4",
-        prepTimeMinutes = "5",
-        name = "Blueberry Cream Muffins",
-        thumbnailUrl = "https://img.buzzfeed.com/tasty-app-user-assets-prod-us-east-1/recipes/4e9524578f544c888af761e10630593b.jpeg",
-        description = "Yummy blueberry muffins."
-    )
-)
 
 fun openRecipeDetail(context: Context, listItem: Recipe) {
     val intent = Intent(context, RecipeDetailsActivity::class.java)
@@ -166,10 +134,6 @@ fun RowItem(url: String, name: String, prepTime: String, servingSize: String, on
                     text = "Prep Time: $prepTime minutes",
                     modifier = Modifier.padding(2.dp)
                 )
-//            Text(
-//                text = "Savor the bold flavors of this Tomato and Anchovy Pasta, a perfect weeknight meal that's both simple and satisfying. With a zesty tomato sauce and umami-packed anchovies, this dish will have your taste buds dancing in no time!"
-//
-//            )
             }
         }
     }
@@ -179,7 +143,7 @@ fun RowItem(url: String, name: String, prepTime: String, servingSize: String, on
 fun RecipeList(recipeList: List<Recipe>, context: Context) {
     LazyColumn {
         items(recipeList.size) { index ->
-            val listItem = recipeList[index]
+            val listItem: Recipe = recipeList[index]
             RowItem(
                 url = checkNotNull(listItem.thumbnailUrl),
                 name = checkNotNull(listItem.name),
@@ -196,7 +160,7 @@ fun RecipeList(recipeList: List<Recipe>, context: Context) {
 @Composable
 fun GreetingPreview() {
     NomscapeTheme {
-        RecipeList(recipeList = resultList, context = LocalContext.current)
+//        RecipeList(recipeList = resultList, context = LocalContext.current)
 //        RowItem(url = "https://img.buzzfeed.com/thumbnailer-prod-us-east-1/video-api/assets/216182.jpg")
 
     }

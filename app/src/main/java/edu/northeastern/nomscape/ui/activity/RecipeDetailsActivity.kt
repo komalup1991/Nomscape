@@ -66,3 +66,13 @@ fun RecipeDetails(recipe: Recipe){
     }
     
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun GreetingPreview() {
+//    NomscapeTheme {
+//        RecipeList(recipeList = resultList, context = LocalContext.current)
+////        RowItem(url = "https://img.buzzfeed.com/thumbnailer-prod-us-east-1/video-api/assets/216182.jpg")
+//
+//    }
+//}

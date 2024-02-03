@@ -17,32 +17,24 @@ import androidx.media3.ui.PlayerView
 
 @Composable
 fun RecipeVideoPlayer(url:String){
-    // Get the current context
     val context = LocalContext.current
-
-    // Initialize ExoPlayer
     val exoPlayer = ExoPlayer.Builder(context).build()
 
-    // Create a MediaSource
     val mediaSource = remember(url) {
-
         MediaItem.fromUri(url)
     }
 
-    // Set MediaSource to ExoPlayer
     LaunchedEffect(mediaSource) {
         exoPlayer.setMediaItem(mediaSource)
         exoPlayer.prepare()
     }
 
-    // Manage lifecycle events
     DisposableEffect(Unit) {
         onDispose {
             exoPlayer.release()
         }
     }
 
-    // Use AndroidView to embed an Android View (PlayerView) into Compose
     AndroidView(
         factory = { ctx ->
             PlayerView(ctx).apply {
@@ -51,7 +43,7 @@ fun RecipeVideoPlayer(url:String){
         },
         modifier = Modifier
             .fillMaxWidth()
-            .height(300.dp) // Set your desired height
+            .height(300.dp)
 
     )
 }
