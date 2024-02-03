@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import edu.northeastern.nomscape.models.Recipe
+import edu.northeastern.nomscape.ui.components.RecipeVideoPlayer
 import edu.northeastern.nomscape.ui.theme.NomscapeTheme
 
 class RecipeDetailsActivity : ComponentActivity() {
@@ -60,6 +61,8 @@ fun RecipeDetails(recipe: Recipe){
         )
         Text(text = recipe.description.toString(),
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp))
+        
+        RecipeVideoPlayer(url = recipe.videoUrl.toString())
     }
     
 }
