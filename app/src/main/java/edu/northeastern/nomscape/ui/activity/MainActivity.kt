@@ -55,7 +55,12 @@ class MainActivity : ComponentActivity() {
                 Scaffold(topBar = {
                     TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
-                    ), title = { Text(text = "Recipes") })
+                    ), title = {
+                        Text(
+                            text = "Recipes",
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                    })
                 }, containerColor = MaterialTheme.colorScheme.outlineVariant) { paddingValues ->
                     Row(modifier = Modifier.padding(paddingValues)) {
                         val uiState =
@@ -66,16 +71,18 @@ class MainActivity : ComponentActivity() {
                                     recipeList = (uiState.value as UiState.Success).recipeList,
                                     context = LocalContext.current
                                 )
+
                             is UiState.Error -> Column(
                                 modifier = Modifier.fillMaxSize(),
                                 verticalArrangement = Arrangement.Center,
-                                horizontalAlignment  = Alignment.CenterHorizontally,
+                                horizontalAlignment = Alignment.CenterHorizontally,
                             ) { Text(text = "Unable to load data!") }
+
                             is UiState.Loading -> {
                                 Column(
                                     modifier = Modifier.fillMaxSize(),
                                     verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment  = Alignment.CenterHorizontally,
+                                    horizontalAlignment = Alignment.CenterHorizontally,
                                 ) {
                                     CircularProgressIndicator(
                                         modifier = Modifier.width(64.dp),

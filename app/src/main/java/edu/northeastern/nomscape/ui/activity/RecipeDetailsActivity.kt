@@ -34,7 +34,8 @@ class RecipeDetailsActivity : ComponentActivity() {
                 Scaffold(topBar = {
                     TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
-                    ), title = { Text(text = "Recipes") })
+                    ), title = { Text(text = "Recipe Details",
+                        style = MaterialTheme.typography.titleLarge) })
                 }, containerColor = MaterialTheme.colorScheme.outlineVariant) { paddingValues ->
                     Row(modifier = Modifier.padding(paddingValues)) {
                         RecipeDetails(recipe = recipe)
@@ -49,7 +50,7 @@ class RecipeDetailsActivity : ComponentActivity() {
 fun RecipeDetails(recipe: Recipe){
     Column {
         Text(text = recipe.name.toString(),
-            fontSize = 24.sp,
+            fontSize = 30.sp,
             modifier = Modifier.padding(vertical = 6.dp, horizontal = 10.dp),)
         AsyncImage(
             model = recipe.thumbnailUrl,
@@ -60,6 +61,7 @@ fun RecipeDetails(recipe: Recipe){
                 .height(300.dp)
         )
         Text(text = recipe.description.toString(),
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp))
         
         RecipeVideoPlayer(url = recipe.videoUrl.toString())
