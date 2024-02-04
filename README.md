@@ -1,6 +1,6 @@
 <p>
-    <img src="[https://picsum.photos/100/100](https://github.com/komalup1991/Nomscape/assets/132989099/52ba2999-0680-462a-916f-e0f02e89a8de)" >
-    <img src="[https://picsum.photos/100/100](https://github.com/komalup1991/Nomscape/assets/132989099/b966d9f1-416e-4c55-983b-70c01973f757)" >
+    <img src="https://github.com/komalup1991/Nomscape/assets/132989099/52ba2999-0680-462a-916f-e0f02e89a8de" >
+    <img src="https://github.com/komalup1991/Nomscape/assets/132989099/b966d9f1-416e-4c55-983b-70c01973f757" >
 </p>
 <!-- ![recipedetail](https://github.com/komalup1991/Nomscape/assets/132989099/52ba2999-0680-462a-916f-e0f02e89a8de)
 ![nomscapelist](https://github.com/komalup1991/Nomscape/assets/132989099/b966d9f1-416e-4c55-983b-70c01973f757)
