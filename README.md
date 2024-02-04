@@ -1,8 +1,19 @@
 
-<h3>Nomscape</h3>
-<p>A recipe listing Android app in Kotlin using Model View ViewModel (MVVM) architecture with Jetpack compose as the UI library.
-Utilized Retrofit library to make API calls along with Kotlin coroutines for async processes. 
-Applied reactive patterns using LiveData for safe UI updates with state management using View Model.</p>
+Welcome to the Nomscape app! This is a recipe listing Android app built using Kotlin and following the Model View ViewModel (MVVM) architecture with Jetpack Compose as the UI library.
+
+## Features
+- Browse recipes from various categories
+- Search through a large database of recipes
+- View detailed recipe instructions and ingredients
+- Save your favourite recipes to your collection for easy access (In progress)
+- Dark and Light mode options
+
+## Technologies Used
+- Retrofit library for making API calls
+- Kotlin coroutines for asynchronous processes
+- LiveData for safe UI updates
+- MVVM Architecture ViewModel for state management
+- Jetpack Compose for building the UI
 
 <p>
     <br>
